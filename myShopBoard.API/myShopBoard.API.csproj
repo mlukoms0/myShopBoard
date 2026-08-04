@@ -8,18 +8,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Scalar.AspNetCore" />
   </ItemGroup>
 
   <ItemGroup>
-    <!--
-      This project references Domain ONLY - deliberately NOT Data.
-      Controllers therefore cannot inject a repository or the DbContext, which makes it
-      structurally impossible to bypass the business rules and yard scoping that live in
-      the Domain services. See ZDocumentation/ARCHITECTURE.md section 4.
-
-      (myStorage's API project references both Domain AND Data, and 10 of its 30 controllers
-      reach straight into the data layer as a result.)
-    -->
     <ProjectReference Include="..\myShopBoard.Domain\myShopBoard.Domain.csproj" />
   </ItemGroup>
 

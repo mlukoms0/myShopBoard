@@ -1,49 +1,58 @@
+using myShopBoard.Domain;
+using Scalar.AspNetCore;
+
 namespace myShopBoard.API;
 
-/// <summary>
-/// Application entry point and composition root.
-/// </summary>
-/// <remarks>
-/// Declared as an explicit class rather than using C# top-level statements, for two reasons:
-/// <list type="bullet">
-///   <item>it matches the myStorage house convention, and</item>
-///   <item><c>public partial class Program</c> is what makes <c>WebApplicationFactory&lt;Program&gt;</c>
-///   usable from the test project. myStorage cannot add API integration tests today without
-///   first making this exact change.</item>
-/// </list>
-/// </remarks>
 public partial class Program
 {
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+            ?? throw new InvalidOperationException(
+                "ConnectionStrings:DefaultConnection is not configured. " +
+                "Set it in appsettings.json locally, or as the environment variable " +
+                "ConnectionStrings__DefaultConnection in Cloud Run.");
+
+        // One call registers the whole stack: domain services, repositories, DbContext, health check.
+        builder.Services.AddShopBoardDomain(connectionString);
+
         builder.Services.AddControllers();
         builder.Services.AddOpenApi();
 
+        // Turns unhandled exceptions into the { error, traceId } contract.
+        builder.Services.AddProblemDetails();
+        builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
+        // The React dev server runs on a different port, which the browser treats as a different
+        // site. Without this, every fetch fails with a CORS error.
+        var allowedOrigins = (builder.Configuration["AllowedOrigins"] ?? "http://localhost:8890")
+            .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        builder.Services.AddCors(options =>
+            options.AddPolicy("AllowUI", policy => policy
+                .WithOrigins(allowedOrigins)
+                .AllowAnyHeader()
+                .AllowAnyMethod()));
+
         var app = builder.Build();
+
+        app.UseExceptionHandler();
 
         if (app.Environment.IsDevelopment())
         {
             app.MapOpenApi();
+            app.MapScalarApiReference();   // browsable API docs at /scalar/v1
         }
 
-        // TODO(pipeline): the full middleware chain is added in later steps, and its ORDER is
-        // load-bearing - see ZDocumentation/ARCHITECTURE.md section 11, invariant 1:
-        //   UseForwardedHeaders -> UseExceptionHandler -> [dev] OpenAPI -> UseCors
-        //   -> UseAuthentication -> UseAuthorization -> UseRateLimiter -> MapControllers
-        //
-        // UseHttpsRedirection is deliberately absent for now. In a container behind Cloud Run,
-        // TLS terminates at Google's edge and the app itself serves plain HTTP on port 8080;
-        // enabling redirection before ForwardedHeaders is configured causes redirect loops.
-        // It is added together with UseHsts and correct proxy configuration in the deploy step.
+        app.UseCors("AllowUI");
 
+        // TODO(auth): UseAuthentication goes here, before UseAuthorization 
         app.UseAuthorization();
-        app.MapControllers();
 
-        // Liveness probe. Docker and Cloud Run health checks hit this.
-        // A readiness check that actually verifies database connectivity arrives in Step 3.
-        app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
+        app.MapControllers();
+        app.MapHealthChecks("/health");
 
         app.Run();
     }
