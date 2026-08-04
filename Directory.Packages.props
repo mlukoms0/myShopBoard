@@ -34,16 +34,29 @@
     <PackageVersion Include="Microsoft.OpenApi" Version="2.7.5" />
   </ItemGroup>
 
+    <ItemGroup Label="Data access">
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.4" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.4" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="10.0.4" /> 
+  </ItemGroup>
+
+  <ItemGroup Label="API">
+    <PackageVersion Include="Scalar.AspNetCore" Version="2.16.17" />
+  </ItemGroup>
+
+
+
   <ItemGroup Label="Testing">
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.4" />
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
+    
 
     <!--
       DO NOT UPGRADE past 7.0.0.
-      FluentAssertions v8 and later are under a commercial licence - a routine "update all
-      packages" would create a payment obligation. myStorage pins 7.0.0 for the same reason.
+      FluentAssertions v8 and later are under a commercial licence - see https://fluentassertions.com/licensing/ for details.
     -->
     <PackageVersion Include="FluentAssertions" Version="7.0.0" />
   </ItemGroup>
