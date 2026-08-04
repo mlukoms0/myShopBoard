@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    The bottom of the dependency chain: this project references NOTHING.
+    Entity Framework Core and the PostgreSQL driver are added here in Step 3.
+  -->
+
+</Project>

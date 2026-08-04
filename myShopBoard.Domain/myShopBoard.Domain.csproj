@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\myShopBoard.Data\myShopBoard.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Lets the test project reach `internal` types here without making them public. -->
+    <InternalsVisibleTo Include="myShopBoard.Tests" />
+  </ItemGroup>
+
+</Project>

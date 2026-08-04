@@ -1,0 +1,51 @@
+<Project>
+
+  <!--
+    Central Package Management (CPM).
+    Every NuGet package version for the whole solution is declared HERE, once.
+    Individual .csproj files reference packages by name only, with no Version attribute.
+
+    This is the single source of truth for package versions.
+  -->
+
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+
+    <!--
+      Also pin TRANSITIVE dependencies (packages pulled in by other packages) to the versions
+      declared below. This is what lets us fix a vulnerable transitive package without waiting
+      for its parent to update - see the Microsoft.OpenApi entry.
+    -->
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+
+  <ItemGroup Label="ASP.NET Core">
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.10" />
+
+    <!--
+      TRANSITIVE PIN - security fix.
+      Microsoft.AspNetCore.OpenApi 10.0.10 pulls in Microsoft.OpenApi 2.0.0, which is vulnerable
+      to CVE-2026-49451 (GHSA-v5pm-xwqc-g5wc): a crafted OpenAPI document containing circular
+      schema references causes uncontrolled recursion and a stack overflow. Impact is availability
+      only, and we only ever parse our own document - but 2.7.5 is the first patched 2.x release
+      and the fix costs nothing.
+      Remove this pin once Microsoft.AspNetCore.OpenApi ships with a patched version by default.
+    -->
+    <PackageVersion Include="Microsoft.OpenApi" Version="2.7.5" />
+  </ItemGroup>
+
+  <ItemGroup Label="Testing">
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.4" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.4" />
+
+    <!--
+      DO NOT UPGRADE past 7.0.0.
+      FluentAssertions v8 and later are under a commercial licence - a routine "update all
+      packages" would create a payment obligation. myStorage pins 7.0.0 for the same reason.
+    -->
+    <PackageVersion Include="FluentAssertions" Version="7.0.0" />
+  </ItemGroup>
+
+</Project>

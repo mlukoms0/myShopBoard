@@ -1,0 +1,34 @@
+<Project>
+
+  <!--
+    Shared build settings for EVERY project in this solution.
+    MSBuild automatically imports this file into every .csproj beneath it, so each project
+    no longer repeats TargetFramework / Nullable / ImplicitUsings.
+
+    Why this file exists: myStorage has no Directory.Build.props, so all five of its projects
+    declare their own settings independently. That is exactly how it ended up targeting net9.0
+    while pinning every ASP.NET Core and EF Core package at 8.0.2 without anyone noticing.
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+
+    <!-- Nullable reference types: the compiler warns when a null could reach a non-nullable field. -->
+    <Nullable>enable</Nullable>
+
+    <!-- Adds the common `using` lines (System, System.Linq, ...) to every file automatically. -->
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- Run the .NET code-style analyzers as part of the build, not just in the IDE. -->
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+
+    <!--
+      Skip loading ICU globalization data. Cuts container size and startup time.
+      Safe here because this app is US-only and formats dates/numbers in the browser.
+    -->
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+</Project>

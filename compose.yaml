@@ -1,0 +1,42 @@
+# Local development services for myShopBoard.
+#
+# Start:   docker compose up -d
+# Stop:    docker compose down          (keeps your data)
+# Reset:   docker compose down -v       (DELETES the database volume - starts fresh)
+# Logs:    docker compose logs -f postgres
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: myshopboard-postgres
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: myshopboard
+      POSTGRES_USER: postgres
+      # Local development only. Production credentials come from Google Secret Manager -
+      # see ZDocumentation/SECURITY_BASELINE.md section 3.
+      POSTGRES_PASSWORD: postgres
+
+    ports:
+      # HOST:CONTAINER
+      # 5435 on this machine so both stacks can run at once - myStorage owns 5434.
+      - "5435:5432"
+
+    volumes:
+      # Named volume so the data survives `docker compose down` and container rebuilds.
+      - myshopboard-pgdata:/var/lib/postgresql/data
+
+    healthcheck:
+      # Lets other services wait for Postgres to be genuinely ready to accept queries,
+      # rather than just "the container started". myStorage has no healthcheck and works
+      # around its absence with a polling loop in dev-up.sh.
+      test: ["CMD-SHELL", "pg_isready -U postgres -d myshopboard"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+volumes:
+  myshopboard-pgdata:
+    name: myshopboard-pgdata

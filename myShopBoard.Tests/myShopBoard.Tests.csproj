@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="FluentAssertions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--
+      Non-obvious but required: the Web SDK's framework reference does NOT flow transitively
+      into a referencing project. Without this line, WebApplicationFactory<Program> and the
+      ASP.NET Core types are not resolvable from the test project.
+      myStorage carries the same line for the same reason.
+    -->
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\myShopBoard.API\myShopBoard.API.csproj" />
+    <ProjectReference Include="..\myShopBoard.Domain\myShopBoard.Domain.csproj" />
+    <ProjectReference Include="..\myShopBoard.Data\myShopBoard.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,42 @@
+# ---------- .NET build output ----------
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+*.user
+*.suo
+*.userprefs
+*.DotSettings.user
+
+# ---------- IDE ----------
+.vs/
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# ---------- Node / frontend ----------
+node_modules/
+dist/
+.vite/
+*.tsbuildinfo
+
+# ---------- Local configuration and SECRETS ----------
+# These must never be committed. myStorage committed live database passwords, an Anthropic
+# API key, and OAuth client secrets in appsettings.json - see the warning in its README.
+appsettings.Development.json
+appsettings.Local.json
+.env
+.env.local
+.env.*.local
+compose.override.yaml
+secrets.json
+
+# ---------- Local dev artifacts ----------
+.dev-logs/
+
+# ---------- OS ----------
+.DS_Store
+Thumbs.db
+desktop.ini
+/myShopBoard.app
