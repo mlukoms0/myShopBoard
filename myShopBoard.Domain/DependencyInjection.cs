@@ -11,6 +11,7 @@ public static class DependencyInjection
         services.AddShopBoardData(connectionString);
 
         services.AddScoped<IAssetService, AssetService>();
+        services.AddScoped<IFleetMapService, FleetMapService>();
 
         return services;
     }

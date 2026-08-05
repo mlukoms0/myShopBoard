@@ -54,6 +54,12 @@ public class Asset : BaseEntity
     /// </summary>
     public DateTime? ArchivedAtUtc { get; set; }
 
+    /// <summary>
+    /// Current position, if known. Null until someone seeds a coordinate or a telematics
+    /// provider reports one - a unit with no location simply does not appear on the map.
+    /// </summary>
+    public AssetLocation? Location { get; set; }
+
 
     
 
