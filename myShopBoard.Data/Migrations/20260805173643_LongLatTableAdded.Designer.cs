@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using myShopBoard.Data;
@@ -11,9 +12,11 @@ using myShopBoard.Data;
 namespace myShopBoard.Data.Migrations
 {
     [DbContext(typeof(ShopBoardDbContext))]
-    partial class ShopBoardDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260805173643_LongLatTableAdded")]
+    partial class LongLatTableAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -11,6 +11,7 @@ DbContext(options)
     public DbSet<AssetType> AssetTypes => Set<AssetType>();
     public DbSet<AssetStatus> AssetStatus => Set<AssetStatus>();
     public DbSet<Asset> Assets => Set<Asset>();
+    public DbSet<AssetLocation> AssetLocations => Set<AssetLocation>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

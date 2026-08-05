@@ -22,7 +22,9 @@ public static class AssetMapper
         a.AssetStatus.ExcludeFromAvailability,
         a.AssetStatus.SortOrder,
         a.YardId,
-        a.Yard.Code,
+        // Yard.Code is nullable on the entity but the API contract guarantees a string -
+        // the UI renders it in a table column and must not have to null-check every row.
+        a.Yard.Code ?? string.Empty,
         a.Yard.Name,
         a.Year,
         a.Make,

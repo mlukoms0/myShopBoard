@@ -25,6 +25,7 @@ public static class DependencyInjection
             }));
 
         services.AddScoped<IAssetRepository, AssetRepository>();
+        services.AddScoped<IFleetMapRepository, FleetMapRepository>();
 
         // Readiness check that opens a database connection and does a health check.
         services.AddHealthChecks()
