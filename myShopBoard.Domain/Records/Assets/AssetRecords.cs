@@ -15,6 +15,11 @@ public record AssetResponse(
     string StatusName,
     string StatusColorHex,
     bool IsAvailable,
+
+    bool IsInShop,
+    bool ExcludeFromAvailability,
+    int StatusSortOrder,
+
     long YardId,
     string YardCode,
     string YardName,
