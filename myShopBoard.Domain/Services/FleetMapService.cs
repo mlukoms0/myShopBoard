@@ -33,8 +33,14 @@ public class FleetMapService(IFleetMapRepository fleetMap) : IFleetMapService
 
     private static MapStateResponse BuildState(IGrouping<string, Asset> group)
     {
+        // Group by YardId, NOT by the Yard object.
+        //
+        // The query runs AsNoTracking, so EF performs no identity resolution and hands back a
+        // SEPARATE Yard instance per asset. Grouping on the reference therefore produced one
+        // group per asset - twelve "yards" of one unit each instead of two yards of eight and
+        // four. Grouping on the key is correct regardless of tracking behaviour.
         var yards = group
-            .GroupBy(a => a.Yard)
+            .GroupBy(a => a.YardId)
             .Select(BuildYard)
             .OrderByDescending(y => y.UnitCount)
             .ToList();
@@ -58,9 +64,11 @@ public class FleetMapService(IFleetMapRepository fleetMap) : IFleetMapService
             Yards: yards);
     }
 
-    private static MapYardResponse BuildYard(IGrouping<Yard, Asset> group)
+    private static MapYardResponse BuildYard(IGrouping<long, Asset> group)
     {
-        var yard = group.Key;
+        // Every asset in the group carries its own Yard instance (see the note above); they
+        // all describe the same row, so the first is as good as any.
+        var yard = group.First().Yard;
 
         return new MapYardResponse(
             YardId: yard.Id,

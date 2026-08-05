@@ -1,5 +1,6 @@
 import {
   ClipboardList,
+  LayoutDashboard,
   LayoutGrid,
   QrCode,
   Route,
@@ -33,7 +34,11 @@ export interface NavItem {
  * hiding a link is COSMETIC - the real gate is [Authorize] on the API.
  */
 export const NAV_ITEMS: NavItem[] = [
-  { label: "Overview", to: "/overview", icon: Truck, implemented: true, mobile: true },
+  { label: "Overview", to: "/overview", icon: LayoutDashboard, implemented: true, mobile: true },
+
+  // The full sortable/searchable fleet table. Overview is the dashboard; this is the list.
+  { label: "Units", to: "/units", icon: Truck, implemented: true, mobile: true },
+
   { label: "Shop Board", to: "/board", icon: LayoutGrid, implemented: true, mobile: true },
 
   // Dispatch side of the house rather than maintenance: available freight, assignments,

@@ -22,8 +22,7 @@ dist/
 *.tsbuildinfo
 
 # ---------- Local configuration and SECRETS ----------
-# These must never be committed. myStorage committed live database passwords, an Anthropic
-# API key, and OAuth client secrets in appsettings.json - see the warning in its README.
+
 appsettings.Development.json
 appsettings.Local.json
 .env
@@ -40,3 +39,6 @@ secrets.json
 Thumbs.db
 desktop.ini
 /myShopBoard.app
+.claude/
+/ZDocumentation
+.gitignore

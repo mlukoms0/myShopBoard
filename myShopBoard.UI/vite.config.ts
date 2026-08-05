@@ -34,7 +34,9 @@ export default defineConfig({
 
   resolve: {
     // Lets us write "@/components/..." instead of "../../../components/..."
-    alias: { "@": path.resolve(__dirname, "./src") },
+    // import.meta.dirname, not __dirname: Vite's next-generation native config loader does
+    // not provide the CommonJS globals, and it is slated to become the default.
+    alias: { "@": path.resolve(import.meta.dirname, "./src") },
   },
 
   plugins: [react()],

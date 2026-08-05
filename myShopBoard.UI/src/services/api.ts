@@ -46,7 +46,13 @@ export interface PagedResult<T> {
 export abstract class ApiService {
   protected readonly baseUrl = "/api";
 
-  protected async get<T>(path: string, params?: Record<string, unknown>): Promise<T> {
+  /**
+   * `params` is typed `object` rather than `Record<string, unknown>` on purpose: a plain
+   * interface like AssetQuery has no index signature, so it is NOT assignable to a Record
+   * even though it is obviously a bag of key/values. Typing the parameter loosely here beats
+   * forcing an index signature onto every query interface.
+   */
+  protected async get<T>(path: string, params?: object): Promise<T> {
     const url = new URL(`${this.baseUrl}${path}`, window.location.origin);
 
     for (const [key, value] of Object.entries(params ?? {})) {

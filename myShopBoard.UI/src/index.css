@@ -2,86 +2,121 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+  myShopBoard design tokens — Soft UI treatment.
 
+  Light canvas, borderless white cards on wide soft shadows, gradient icon tiles, generous
+  radii. The navigation rail is a floating white card rather than a dark slab.
+
+  The SHOP BOARD keeps its own dark surface (--board-*). That is deliberate, not an
+  oversight: a board is a working surface, and a dark board inside a light shell reads as
+  intentional the same way a code editor does.
+*/
 
 @layer base {
   :root {
-   
+    /* Canvas + surfaces */
     --background: 210 20% 98%;
-    --foreground: 222 25% 12%;
+    --foreground: 216 20% 21%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 25% 12%;
+    --card-foreground: 216 20% 21%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 25% 12%;
+    --popover-foreground: 216 20% 21%;
 
-    
-    --primary: 28 92% 45%;
-    --primary-foreground: 40 60% 98%;
+    /* Soft UI blue */
+    --primary: 227 100% 56%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 14% 94%;
-    --secondary-foreground: 222 25% 18%;
+    --secondary: 216 16% 96%;
+    --secondary-foreground: 216 20% 28%;
 
-    --muted: 220 14% 94%;
-    --muted-foreground: 220 9% 44%;
+    --muted: 216 16% 96%;
+    --muted-foreground: 216 10% 52%;
 
-    --accent: 30 90% 95%;
-    --accent-foreground: 28 92% 32%;
+    --accent: 227 100% 96%;
+    --accent-foreground: 227 100% 42%;
 
-    --destructive: 0 72% 48%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 84% 47%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 220 13% 88%;
-    --input: 220 13% 88%;
-    --ring: 28 92% 45%;
+    --border: 214 20% 91%;
+    --input: 214 20% 91%;
+    --ring: 227 100% 56%;
 
-    --radius: 0.375rem;
+    /* Soft UI uses noticeably rounder corners than a standard admin theme */
+    --radius: 0.875rem;
 
-    /* Navigation rail - dark regardless of light/dark mode, like a machine panel */
-    --nav: 222 24% 11%;
-    --nav-foreground: 220 14% 78%;
-    --nav-muted: 220 10% 52%;
-    --nav-hover: 222 20% 17%;
-    --nav-active: 28 92% 45%;
-    --nav-border: 222 18% 20%;
+    /* Navigation rail — light, floating */
+    --nav: 0 0% 100%;
+    --nav-foreground: 216 18% 34%;
+    --nav-muted: 216 10% 58%;
+    --nav-hover: 216 16% 96%;
+    --nav-active: 227 100% 56%;
+    --nav-border: 214 20% 93%;
+
+    /* Shop board — stays dark */
+    --board: 222 24% 11%;
+    --board-foreground: 220 14% 78%;
+    --board-muted: 220 10% 52%;
+    --board-hover: 222 20% 17%;
+    --board-border: 222 18% 20%;
+
+    /* Gradient stops for the icon tiles. Soft UI's signature element. */
+    --grad-primary-from: #2152ff;
+    --grad-primary-to:   #21d4fd;
+    --grad-success-from: #17ad37;
+    --grad-success-to:   #98ec2d;
+    --grad-danger-from:  #ea0606;
+    --grad-danger-to:    #ff667c;
+    --grad-warning-from: #f53939;
+    --grad-warning-to:   #fbcf33;
+    --grad-dark-from:    #141727;
+    --grad-dark-to:      #3a416f;
   }
 
   .dark {
     --background: 222 24% 8%;
     --foreground: 220 14% 92%;
 
-    --card: 222 22% 11%;
+    --card: 222 22% 12%;
     --card-foreground: 220 14% 92%;
 
-    --popover: 222 22% 11%;
+    --popover: 222 22% 12%;
     --popover-foreground: 220 14% 92%;
 
-    --primary: 32 95% 52%;
+    --primary: 227 100% 64%;
     --primary-foreground: 222 24% 8%;
 
-    --secondary: 222 18% 17%;
+    --secondary: 222 18% 18%;
     --secondary-foreground: 220 14% 92%;
 
-    --muted: 222 18% 17%;
+    --muted: 222 18% 18%;
     --muted-foreground: 220 10% 58%;
 
-    --accent: 222 18% 17%;
-    --accent-foreground: 32 95% 60%;
+    --accent: 222 18% 18%;
+    --accent-foreground: 227 100% 72%;
 
-    --destructive: 0 62% 46%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
 
     --border: 222 16% 20%;
     --input: 222 16% 20%;
-    --ring: 32 95% 52%;
+    --ring: 227 100% 64%;
 
-    --nav: 222 26% 7%;
-    --nav-foreground: 220 14% 80%;
+    --nav: 222 22% 12%;
+    --nav-foreground: 220 12% 74%;
     --nav-muted: 220 10% 50%;
-    --nav-hover: 222 20% 14%;
-    --nav-active: 32 95% 52%;
-    --nav-border: 222 18% 16%;
+    --nav-hover: 222 18% 18%;
+    --nav-active: 227 100% 64%;
+    --nav-border: 222 16% 20%;
+
+    --board: 222 26% 7%;
+    --board-foreground: 220 14% 80%;
+    --board-muted: 220 10% 50%;
+    --board-hover: 222 20% 14%;
+    --board-border: 222 18% 16%;
   }
 }
 
@@ -100,10 +135,17 @@
     @apply bg-background text-foreground antialiased;
   }
 
-  /*
-    Tabular figures everywhere by default. 
-  */
+  /* Meter readings, hours and counts sit in columns; proportional digits make them ragged. */
   table {
     font-variant-numeric: tabular-nums;
   }
+}
+
+@layer components {
+  /* Soft UI's gradient icon tile. Used on stat cards and the active nav item. */
+  .grad-primary { background-image: linear-gradient(310deg, var(--grad-primary-from), var(--grad-primary-to)); }
+  .grad-success { background-image: linear-gradient(310deg, var(--grad-success-from), var(--grad-success-to)); }
+  .grad-danger  { background-image: linear-gradient(310deg, var(--grad-danger-from),  var(--grad-danger-to)); }
+  .grad-warning { background-image: linear-gradient(310deg, var(--grad-warning-from), var(--grad-warning-to)); }
+  .grad-dark    { background-image: linear-gradient(310deg, var(--grad-dark-from),    var(--grad-dark-to)); }
 }

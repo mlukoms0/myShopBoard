@@ -8,8 +8,12 @@
     "allowArbitraryExtensions": true,
     "skipLibCheck": true,
 
-    "baseUrl": ".",
-    "paths": { "@/*": ["./src/*"]},
+    /* No baseUrl: it is deprecated in TypeScript 6 and stops working in 7.
+       `paths` now resolves relative to this file, which is what we want anyway. */
+    "paths": { "@/*": ["./src/*"] },
+
+    /* Required to import the TopoJSON map data from world-atlas / us-atlas. */
+    "resolveJsonModule": true,
     
     /* Bundler mode */
     "moduleResolution": "bundler",
