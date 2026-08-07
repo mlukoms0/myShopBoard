@@ -1,7 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { AppShell } from "@/components/layout/AppShell";
 import OverviewPage from "@/pages/overview/OverviewPage";
-import FleetPage from "@/pages/fleet/FleetPage";
+import UnitsPage from "@/pages/units/UnitsPage";
 import ShopBoardPage from "@/pages/board/ShopBoardPage";
 
 /**
@@ -21,8 +21,8 @@ export default function App() {
           {/* Dashboard: KPIs, globe, charts */}
           <Route path="/overview" element={<OverviewPage />} />
 
-          {/* The full sortable/searchable unit table */}
-          <Route path="/units" element={<FleetPage />} />
+          {/* Unit list plus the detail preview rail */}
+          <Route path="/units" element={<UnitsPage />} />
 
           <Route path="/board" element={<ShopBoardPage />} />
 

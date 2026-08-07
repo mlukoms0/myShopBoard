@@ -70,6 +70,47 @@ export abstract class ApiService {
     return this.handleResponse<T>(response);
   }
 
+  protected async post<T>(path: string, body: unknown): Promise<T> {
+    const response = await fetch(`${this.baseUrl}${path}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(body),
+      // TODO(auth): attach the bearer token here once login exists.
+    });
+
+    return this.handleResponse<T>(response);
+  }
+
+  protected async del(path: string): Promise<void> {
+    const response = await fetch(`${this.baseUrl}${path}`, {
+      method: "DELETE",
+      headers: { Accept: "application/json" },
+    });
+
+    await this.handleResponse<void>(response);
+  }
+
+  /** Multipart upload. No Content-Type header - the browser must set the multipart boundary. */
+  protected async postForm<T>(path: string, formData: FormData): Promise<T> {
+    const response = await fetch(`${this.baseUrl}${path}`, {
+      method: "POST",
+      headers: { Accept: "application/json" },
+      body: formData,
+    });
+
+    return this.handleResponse<T>(response);
+  }
+
+  protected async getBlob(path: string): Promise<Blob> {
+    const response = await fetch(`${this.baseUrl}${path}`);
+
+    if (!response.ok) {
+      throw new ApiError(response.status, `Download failed with status ${response.status}`);
+    }
+
+    return response.blob();
+  }
+
   private async handleResponse<T>(response: Response): Promise<T> {
     // 204 No Content has no body - calling .json() on it throws.
     if (response.status === 204) return undefined as T;

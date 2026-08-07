@@ -35,5 +35,12 @@ public static class AssetMapper
         a.CurrentSecondaryMeter,
         a.SecondaryMeterUnit,
         a.CurrentMeterAsOfUtc,
-        a.InServiceDate);
+        a.InServiceDate,
+        a.OutOfServiceDate,
+        a.Color,
+        a.RegistrationNumber,
+        a.RegistrationExpiresAtUtc,
+        a.DotExpiresAtUtc,
+        a.InsuranceExpiresAtUtc,
+        a.DateAquriedUtc);   // entity spelling; DTO is DateAcquiredUtc
 }

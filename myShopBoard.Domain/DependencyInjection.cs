@@ -12,6 +12,7 @@ public static class DependencyInjection
 
         services.AddScoped<IAssetService, AssetService>();
         services.AddScoped<IFleetMapService, FleetMapService>();
+        services.AddScoped<IAssetImportService, AssetImportService>();
 
         return services;
     }

@@ -1,7 +1,12 @@
-import type { InputHTMLAttributes } from "react";
+import type { ComponentPropsWithRef } from "react";
 import { cn } from "@/lib/utils";
 
-export function Input({ className, type, ...props }: InputHTMLAttributes<HTMLInputElement>) {
+/**
+ * ComponentPropsWithRef rather than InputHTMLAttributes: React 19 passes `ref` as an
+ * ordinary prop to function components, so forwardRef is unnecessary - but the props type
+ * still has to declare it or callers cannot pass one.
+ */
+export function Input({ className, type, ...props }: ComponentPropsWithRef<"input">) {
   return (
     <input
       type={type}

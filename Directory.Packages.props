@@ -45,6 +45,10 @@
     <PackageVersion Include="Scalar.AspNetCore" Version="2.16.17" />
   </ItemGroup>
 
+  <ItemGroup Label="Documents">
+    <PackageVersion Include="ClosedXML" Version="0.105.0" />
+  </ItemGroup>
+
 
 
   <ItemGroup Label="Testing">

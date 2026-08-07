@@ -67,7 +67,46 @@ public class AssetRepository(ShopBoardDbContext db) : IAssetRepository
           .Include(a => a.Yard)
           .FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
 
-    
+    public async Task<Asset> AddAsync(Asset asset, CancellationToken cancellationToken)
+    {
+        db.Assets.Add(asset);
+        await db.SaveChangesAsync(cancellationToken);
+
+        // Insert only populates the foreign keys; load navigations so the caller can map a
+        // full response without a second round trip.
+        await db.Entry(asset).Reference(a => a.AssetType).LoadAsync(cancellationToken);
+        await db.Entry(asset).Reference(a => a.AssetStatus).LoadAsync(cancellationToken);
+        await db.Entry(asset).Reference(a => a.Yard).LoadAsync(cancellationToken);
+
+        return asset;
+    }
+
+    public async Task<bool> ArchiveAsync(long id, CancellationToken cancellationToken)
+    {
+        // Tracked, unlike the read paths - EF needs to see the change to write it.
+        // The global query filter means an already-archived asset is not found, so a repeat
+        // delete returns 404 rather than silently succeeding.
+        var asset = await db.Assets.FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
+        if (asset is null) return false;
+
+        asset.ArchivedAtUtc = DateTime.UtcNow;
+        await db.SaveChangesAsync(cancellationToken);
+        return true;
+    }
+
+    public Task<bool> UnitNumberExistsAsync(string unitNumber, CancellationToken cancellationToken) =>
+        db.Assets.AnyAsync(a => a.UnitNumber == unitNumber, cancellationToken);
+
+    public async Task<(IReadOnlyList<AssetType> Types, IReadOnlyList<AssetStatus> Statuses, IReadOnlyList<Yard> Yards)>
+        GetLookupsAsync(CancellationToken cancellationToken)
+    {
+        var types = await db.AssetTypes.AsNoTracking().OrderBy(t => t.Name).ToListAsync(cancellationToken);
+        var statuses = await db.AssetStatus.AsNoTracking().OrderBy(s => s.SortOrder).ToListAsync(cancellationToken);
+        var yards = await db.Yards.AsNoTracking().Where(y => y.IsActive).OrderBy(y => y.Name).ToListAsync(cancellationToken);
+
+        return (types, statuses, yards);
+    }
+
     /// <summary>
     /// Parses "column:asc|desc" from the client into a hard-coded switch.
     /// NEVER build order-by SQL from a raw client string - that is a SQL injection hole.
